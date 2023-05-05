@@ -1,0 +1,18 @@
+#boxVerde{
+    background-color: #CCF9CD;    
+    border: 2px solid #068708;
+    border-radius: 8px;
+}
+#btnCalcular{
+    background-color: #CCF9CD;
+    border: 1px solid #068708;   
+}
+
+#boxRojo{
+    background-color: #F5A99F;    
+    border: 2px solid #ED010F;
+    border-radius: 8px;
+}
+.subrayado{
+    border-bottom: 1px solid black;
+}
