@@ -5,20 +5,20 @@ function Gastar(gasto, cantidad) {
 }
 
 //capturo los elementos del DOM con  el id correspondiente
-var btnCalcular = document.querySelector('#btnCalcular');
-var totalPresupuesto = document.querySelector('#ingreso');
-var gastoTotal = document.querySelector('#totalGastos');
-var saldoTotal = document.querySelector('#saldoTotal');
-var descripcionGasto = document.querySelector('#txtDescripcionGasto');
-var gastoPorUnidad = document.querySelector('#txtCantidadGasto');
-var btnGastar = document.querySelector('#btnAddGasto');
+let btnCalcular = document.querySelector('#btnCalcular');
+let totalPresupuesto = document.querySelector('#ingreso');
+let gastoTotal = document.querySelector('#totalGastos');
+let saldoTotal = document.querySelector('#saldoTotal');
+let descripcionGasto = document.querySelector('#txtDescripcionGasto');
+let gastoPorUnidad = document.querySelector('#txtCantidadGasto');
+let btnGastar = document.querySelector('#btnAddGasto');
 
 //  se crea un arreglo vacio para ir llenando con los  gastos 
-var gastos = [];
+let gastos = [];
 
 //funcion para ingresar el presupuesto inicial al HTML
 function ingresarPresupuesto() {
-    var inputIngreso = document.querySelector('#txtPresupuesto').value;
+   let inputIngreso = document.querySelector('#txtPresupuesto').value;
     totalPresupuesto.textContent = "$" + inputIngreso;
     saldoTotal.textContent = "$" + inputIngreso;
 }
@@ -26,8 +26,8 @@ btnCalcular.addEventListener('click', ingresarPresupuesto);
 
 //funcion para ir añadiendo gastos
 function ingresarGasto() {
-    var inputNombreGasto = descripcionGasto.value;
-    var inputCantidadGasto = gastoPorUnidad.value;
+    let inputNombreGasto = descripcionGasto.value;
+    let inputCantidadGasto = gastoPorUnidad.value;
 
     if (!inputNombreGasto || !inputCantidadGasto) { //validar que no ingrese campos vacios
         alert('Por favor, ingrese valores para ambos campos');
@@ -40,20 +40,20 @@ function ingresarGasto() {
     }
 
     //se crea un objeto nuevoGasto . añadir al arreglo gastos 
-    var nuevoGasto = new Gastar(inputNombreGasto, inputCantidadGasto);
+    let nuevoGasto = new Gastar(inputNombreGasto, inputCantidadGasto);
     gastos.push(nuevoGasto);
 
     //Crear la fila y celdas para los datos que se insertarán en la tabla HTML  id="tablaDos"
-    var fila = document.createElement('tr');
-    var celdaDescripcion = document.createElement('td');
+    let fila = document.createElement('tr');
+    let celdaDescripcion = document.createElement('td');
     celdaDescripcion.textContent = nuevoGasto.gasto;
-    var celdaCantidad = document.createElement('td');
+    let celdaCantidad = document.createElement('td');
     celdaCantidad.textContent = "$" + nuevoGasto.cantidad;
     celdaCantidad.setAttribute('id', 'gastoUnitario');
-    var celdaEliminar = document.createElement('td');
-    var botonEliminar = document.createElement('button');
-    botonEliminar.setAttribute('class', 'btn btn-light');
-    var iconTrash = document.createElement('i');
+    let celdaEliminar = document.createElement('td');
+    let botonEliminar = document.createElement('button');
+    botonEliminar.setAttribute('class', 'btn btn-light center');
+    let iconTrash = document.createElement('i');
     iconTrash.setAttribute('class', 'fa-solid fa-trash-can fa-xs');
     botonEliminar.addEventListener('click', function () {//evento para eliminar fila al hacer clic en boton
         fila.parentNode.removeChild(fila); // Eliminar fila
@@ -72,14 +72,28 @@ btnGastar.addEventListener('click', ingresarGasto);
 
 
 function actualizarTotales() {
-    var sumaGastos = 0;
+    let sumaGastos = 0;
     gastos.forEach(function (gasto) {
         sumaGastos += parseInt(gasto.cantidad);
     });
     gastoTotal.textContent = "$" + sumaGastos.toLocaleString(); // Mostrar en HTML la suma con formato de moneda
 
-    var total = parseInt(totalPresupuesto.textContent.slice(1)); // Convertir el valor de totalPresupuesto a número
-    saldoTotal.textContent = "$" + (total - sumaGastos).toLocaleString(); // Mostrar resta entre presupuesto y sumaGastos con formato de moneda.
+    let total = parseInt(totalPresupuesto.textContent.slice(1)); // Convertir el valor de totalPresupuesto a número
+    let saldo = total - sumaGastos;
+    saldoTotal.textContent = "$" + saldo.toLocaleString(); // Mostrar resta entre presupuesto y sumaGastos con formato de moneda.
+    if(saldo <= 0 ){
+        saldoTotal.setAttribute('class', 'table-danger');
+        // Desactivar ingreso de saldo negativo
+        saldoTotal.setAttribute('readonly', true);
+        // Mostrar mensaje de saldo insuficiente
+        alert("Saldo insuficiente. Tus gastos superan a tus ingresos");
+    }
+    else {
+        saldoTotal.removeAttribute('class');
+        saldoTotal.removeAttribute('readonly');
+    }
 }
+
+
 
 
